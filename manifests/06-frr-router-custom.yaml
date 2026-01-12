@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frr-router
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frr-router
+  template:
+    metadata:
+      labels:
+        app: frr-router
+    spec:
+      imagePullSecrets:
+      - name: docker-hub-secret
+      containers:
+      - name: frr-router
+        image: mqmqmqmq/cours:frr-router
+        ports:
+        - containerPort: 161
+          protocol: UDP
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+            - SYS_ADMIN
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
